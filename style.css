@@ -939,3 +939,32 @@ body{
   .opening-letter-inner{padding:30px 24px}
   .opening-body{font-size:18px}
 }
+/* ============ 背景音乐按钮 ============ */
+.music-toggle{
+  position:fixed;
+  right:18px;bottom:18px;
+  width:44px;height:44px;
+  border-radius:50%;
+  background:rgba(245,239,227,.92);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  z-index:1700;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s;
+  -webkit-tap-highlight-color:transparent;
+  color:var(--ink-soft);
+}
+.music-toggle:hover{background:var(--paper-deep)}
+.music-toggle:active{transform:scale(.92)}
+.music-toggle .music-slash{display:none}
+.music-toggle.off .music-note{display:none}
+.music-toggle.off .music-slash{display:block;color:var(--ink-light)}
+.music-toggle.playing .music-note{animation:spin 6s linear infinite}
+@keyframes spin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+@media (max-width: 480px){
+  .music-toggle{width:40px;height:40px;right:14px;bottom:14px}
+}
