@@ -1,6 +1,6 @@
 /* =========================================
    致贝贝 · 一封从深圳寄回去的回信
-   桌面端惊艳 / 手机端丝滑 / 不降任何效果
+   温柔手账风 · 序章开箱 · 全屏灯箱 · 名字雨
    ========================================= */
 
 :root{
@@ -23,14 +23,14 @@
   --line-soft:rgba(43,38,32,.08);
   --shadow:0 30px 60px -30px rgba(43,38,32,.25), 0 8px 18px -8px rgba(43,38,32,.15);
   --shadow-deep:0 50px 100px -40px rgba(43,38,32,.45);
-  --font-zh:"Noto Serif SC","Songti SC","STSong","Source Han Serif SC","SimSun","PingFang SC",serif;
-  --font-kai:"Ma Shan Zheng","KaiTi","STKaiti","FangSong","STSong","Noto Serif SC",cursive,serif;
-  --font-hand:"Long Cang","Ma Shan Zheng","KaiTi","STKaiti",cursive;
-  --font-en:"Cormorant Garamond","Georgia","Times New Roman",serif;
+  --font-zh:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  --font-kai:"Ma Shan Zheng","KaiTi","STKaiti",serif;
+  --font-hand:"Long Cang","Ma Shan Zheng",cursive;
+  --font-en:"Cormorant Garamond","Noto Serif SC",serif;
+  --font-mono:"ZCOOL XiaoWei",serif;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{background:var(--paper);color:var(--ink);overflow-x:hidden}
 body{
   font-family:var(--font-zh);
@@ -38,7 +38,6 @@ body{
   line-height:1.85;
   letter-spacing:.02em;
   -webkit-font-smoothing:antialiased;
-  -webkit-tap-highlight-color:transparent;
   background:
     radial-gradient(ellipse at 20% 10%, rgba(176,138,62,.06), transparent 50%),
     radial-gradient(ellipse at 80% 90%, rgba(122,147,179,.06), transparent 50%),
@@ -46,34 +45,28 @@ body{
   position:relative;
 }
 
-img{display:block;max-width:100%;height:auto}
-
-/* 噪点 — 移动端用 background-attachment:scroll 减少重绘 */
 .paper-grain{
   position:fixed;inset:0;pointer-events:none;z-index:1500;
   opacity:.35;mix-blend-mode:multiply;
-  background-attachment:scroll;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.13 0 0 0 0 0.10 0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
 .progress{
   position:fixed;top:0;left:0;right:0;height:2px;z-index:1600;
   background:rgba(43,38,32,.05);
-  pointer-events:none;
 }
 .progress .bar{
   display:block;height:100%;
   background:linear-gradient(90deg, var(--accent), var(--gold));
   width:0;transition:width .12s linear;
-  transform-origin:left;
 }
 
 /* ============ 序章 · 开箱 ============ */
 .opening{
-  position:relative;            /* 修复 1.2:让 .opening-letter 在容器内 absolute,不再回退到 body */
-  min-height:100vh;min-height:100svh;
+  position:relative;
+  height:100vh;min-height:720px;
   display:flex;align-items:center;justify-content:center;
-  overflow:hidden;              /* 裁掉 .opening-letter 浮层,防止覆盖下方 cover */
+  overflow:hidden;
   background:
     radial-gradient(ellipse at 50% 30%, rgba(205,183,224,.4), transparent 70%),
     radial-gradient(ellipse at 80% 80%, rgba(255,221,191,.3), transparent 60%),
@@ -90,16 +83,15 @@ img{display:block;max-width:100%;height:auto}
   display:flex;flex-direction:column;align-items:center;gap:60px;
 }
 
+/* —— 礼盒 —— */
 .box{
   position:relative;
   width:320px;height:220px;
   perspective:1200px;
   cursor:pointer;
   transition:transform .8s cubic-bezier(.2,.7,.2,1);
-  transform:translateZ(0);
 }
-.box:hover{transform:translateY(-6px) translateZ(0)}
-.box:active{transform:translateY(-2px) scale(.98) translateZ(0)}
+.box:hover{transform:translateY(-6px)}
 
 .box-lid{
   position:absolute;left:0;right:0;top:0;
@@ -110,7 +102,6 @@ img{display:block;max-width:100%;height:auto}
   transform-origin:bottom center;
   transition:transform 1.2s cubic-bezier(.5,-0.2,.4,1.4);
   z-index:3;
-  will-change:transform;
 }
 .box-face{
   position:absolute;inset:0;
@@ -120,7 +111,9 @@ img{display:block;max-width:100%;height:auto}
   border-radius:6px 6px 0 0;
   padding:8px;
 }
-.box-pattern{display:flex;gap:14px}
+.box-pattern{
+  display:flex;gap:14px;
+}
 .box-pattern .pup{
   width:10px;height:10px;border-radius:50%;
   background:rgba(255,255,255,.7);
@@ -184,6 +177,7 @@ img{display:block;max-width:100%;height:auto}
   z-index:1;
 }
 
+/* 开箱状态 */
 .box.opened .box-lid{
   transform:rotateX(-110deg) translateY(-30px) translateZ(20px);
 }
@@ -200,6 +194,7 @@ img{display:block;max-width:100%;height:auto}
   75%{transform:translateY(-2px)}
 }
 
+/* 开箱提示 */
 .open-hint{
   text-align:center;
   font-family:var(--font-hand);
@@ -208,8 +203,6 @@ img{display:block;max-width:100%;height:auto}
   letter-spacing:.15em;
   animation:hint 2.4s ease-in-out infinite;
   transition:opacity .6s;
-  user-select:none;
-  -webkit-user-select:none;
 }
 .open-hint .open-line{
   width:1px;height:30px;
@@ -232,15 +225,13 @@ img{display:block;max-width:100%;height:auto}
   50%{transform:translateY(-6px);opacity:1}
 }
 
-/* 修复 1.2:.opening-letter 现在被 .opening(relative+overflow:hidden)裁剪,不再覆盖 cover */
+/* 序章里的信 */
 .opening-letter{
   position:absolute;inset:0;
   display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;
   transition:opacity 1s ease .8s;
   z-index:5;
-  padding:20px;
-  contain:layout paint;             /* 性能:隔离浮层对外部的影响 */
 }
 .opening-letter.show{opacity:1}
 .opening-letter-inner{
@@ -249,9 +240,7 @@ img{display:block;max-width:100%;height:auto}
   padding:60px 80px;
   border:1px solid var(--line-soft);
   box-shadow:var(--shadow-deep);
-  max-width:560px;width:100%;
-  max-height:calc(100vh - 60px);max-height:calc(100svh - 60px);
-  overflow-y:auto;
+  max-width:560px;
   transform:scale(.85) translateY(40px);
   transition:transform 1.2s cubic-bezier(.2,.7,.2,1) .8s;
 }
@@ -293,22 +282,24 @@ img{display:block;max-width:100%;height:auto}
 
 /* ============ 封面 ============ */
 .cover{
-  position:relative;            /* 修复 1.1:.scroll-hint 改 inline,这个保持 cover 自洽 */
-  min-height:100vh;min-height:100svh;
+  min-height:100vh;
   display:flex;align-items:center;justify-content:center;
   text-align:center;
-  padding:80px 24px 140px;       /* 底部加 140px 留位,scroll-hint 不再 absolute */
+  padding:80px 24px;
+  position:relative;
 }
 .cover-frame{
   position:absolute;inset:40px;
   border:1px solid var(--line);
-  pointer-events:none;           /* 不挡点击 */
+  pointer-events:none;
 }
-.cover-frame::before{
-  content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);
+.cover-frame::before,
+.cover-frame::after{
+  content:"";position:absolute;left:50%;transform:translateX(-50%);
   width:30px;height:1px;background:var(--accent);
 }
-/* 修复 1.3:移除 .cover-frame::after 的底部装饰线,与 scroll-hint 视觉冲突 */
+.cover-frame::before{top:0}
+.cover-frame::after{bottom:0}
 
 .cover-inner{max-width:760px;position:relative}
 .cover-date,.cover-from{
@@ -368,22 +359,20 @@ img{display:block;max-width:100%;height:auto}
   text-transform:uppercase;
 }
 .cover-meta .dot{margin:0 14px;color:var(--accent)}
-
-/* 修复 1.1:.scroll-hint 改为文档流内联,不再 absolute */
 .scroll-hint{
-  position:relative;
-  margin:80px auto 0;
+  position:absolute;bottom:30px;left:50%;
+  transform:translateX(-50%);
   display:flex;flex-direction:column;align-items:center;gap:12px;
   color:var(--ink-light);
   font-size:12px;letter-spacing:.3em;
   animation:hint2 2.4s ease-in-out infinite;
 }
 @keyframes hint2{
-  0%,100%{transform:translateY(0);opacity:.6}
-  50%{transform:translateY(6px);opacity:1}
+  0%,100%{transform:translate(-50%,0);opacity:.6}
+  50%{transform:translate(-50%,6px);opacity:1}
 }
 
-/* ============ 通用 ============ */
+/* ============ 通用：节序号 ============ */
 .sec-num{
   font-family:var(--font-en);
   font-style:italic;
@@ -393,7 +382,9 @@ img{display:block;max-width:100%;height:auto}
   margin-bottom:20px;
   text-align:center;
 }
-.sec-title,.sec-sub{text-align:center}
+.sec-title,.sec-sub{
+  text-align:center;
+}
 .sec-title{
   font-family:var(--font-kai);
   font-size:clamp(28px,4vw,42px);
@@ -429,11 +420,30 @@ img{display:block;max-width:100%;height:auto}
   cursor:pointer;
   transition:all .4s;
   position:relative;
+  padding-left:0;
 }
-.toc-list li:hover{padding-left:14px;border-bottom-color:var(--accent)}
-.toc-list .k{font-family:var(--font-kai);color:var(--accent);font-size:22px}
-.toc-list .n{font-family:var(--font-kai);font-size:22px;color:var(--ink);letter-spacing:.12em}
-.toc-list .d{font-family:var(--font-hand);color:var(--ink-light);font-size:14px;letter-spacing:.1em;text-align:right}
+.toc-list li:hover{
+  padding-left:14px;
+  border-bottom-color:var(--accent);
+}
+.toc-list .k{
+  font-family:var(--font-kai);
+  color:var(--accent);
+  font-size:22px;
+}
+.toc-list .n{
+  font-family:var(--font-kai);
+  font-size:22px;
+  color:var(--ink);
+  letter-spacing:.12em;
+}
+.toc-list .d{
+  font-family:var(--font-hand);
+  color:var(--ink-light);
+  font-size:14px;
+  letter-spacing:.1em;
+  text-align:right;
+}
 
 /* ============ 礼物页 ============ */
 .page{
@@ -441,12 +451,13 @@ img{display:block;max-width:100%;height:auto}
   max-width:1100px;
   margin:0 auto;
   position:relative;
-  /* 修复:scrollIntoView 锚点目标留出 2px 让位给 fixed 进度条 */
-  scroll-margin-top:8px;
 }
 .page:nth-of-type(odd){background:rgba(176,138,62,.025)}
 
-.page-side{display:flex;justify-content:flex-end;margin-bottom:60px}
+.page-side{
+  display:flex;justify-content:flex-end;
+  margin-bottom:60px;
+}
 .page-tag{
   font-family:var(--font-en);
   font-style:italic;
@@ -456,7 +467,10 @@ img{display:block;max-width:100%;height:auto}
   display:flex;align-items:center;gap:14px;
   padding-right:8px;
 }
-.page-tag::before{content:"";width:30px;height:1px;background:var(--accent)}
+.page-tag::before{
+  content:"";width:30px;height:1px;
+  background:var(--accent);
+}
 .page-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -527,18 +541,19 @@ img{display:block;max-width:100%;height:auto}
   background:transparent;
   border:1px solid var(--ink);
   color:var(--ink);
-  padding:12px 22px;
+  padding:10px 18px;
   font-family:var(--font-kai);
-  font-size:15px;
+  font-size:14px;
   letter-spacing:.15em;
   cursor:pointer;
   transition:all .3s;
-  min-height:44px;
-  -webkit-tap-highlight-color:transparent;
 }
-.btn-view:hover{background:var(--ink);color:var(--paper)}
-.btn-view:active{transform:scale(.97)}
+.btn-view:hover{
+  background:var(--ink);
+  color:var(--paper);
+}
 
+/* 拍立得相片 */
 .polaroid{
   background:#fbf6ea;
   padding:18px 18px 56px;
@@ -546,12 +561,10 @@ img{display:block;max-width:100%;height:auto}
   position:relative;
   transition:transform .8s cubic-bezier(.2,.7,.2,1);
   transform-style:preserve-3d;
-  will-change:transform;
 }
 .polaroid img{
   width:100%;height:auto;display:block;
   filter:saturate(.92) contrast(.95);
-  background:#f0e9d4;
 }
 .polaroid .caption{
   position:absolute;left:0;right:0;bottom:18px;
@@ -567,14 +580,13 @@ img{display:block;max-width:100%;height:auto}
   pointer-events:none;
 }
 
-/* ============ 玖 · 高潮 ============ */
+/* ============ 玖 · 高潮页 ============ */
 .hero{
   padding:140px 24px;
   background:linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
   text-align:center;
   position:relative;
   overflow:hidden;
-  scroll-margin-top:8px;
 }
 .hero::before{
   content:"";position:absolute;inset:0;
@@ -610,7 +622,6 @@ img{display:block;max-width:100%;height:auto}
   border-radius:2px;
   box-shadow:var(--shadow);
   filter:saturate(.95) contrast(.95);
-  background:#f0e9d4;
 }
 .hero-overlay{
   position:absolute;left:50%;top:50%;
@@ -646,6 +657,7 @@ img{display:block;max-width:100%;height:auto}
   letter-spacing:.5em;
   padding-left:.5em;
 }
+
 .hero-desc{
   font-family:var(--font-zh);
   font-weight:300;
@@ -787,9 +799,6 @@ img{display:block;max-width:100%;height:auto}
   cursor:pointer;
   opacity:.5;
   transition:opacity .4s;
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
 }
 .footer-secret:hover{opacity:1}
 
@@ -808,7 +817,6 @@ img{display:block;max-width:100%;height:auto}
   padding:40px;
 }
 .lightbox.show{opacity:1;pointer-events:auto}
-.lightbox-pic{display:flex;justify-content:center}
 .lightbox-img{
   max-width:90vw;max-height:80vh;
   object-fit:contain;
@@ -821,7 +829,6 @@ img{display:block;max-width:100%;height:auto}
   font-family:var(--font-hand);
   font-size:18px;
   letter-spacing:.15em;
-  text-align:center;
 }
 .lightbox-close{
   position:absolute;top:30px;right:30px;
@@ -831,7 +838,6 @@ img{display:block;max-width:100%;height:auto}
   display:flex;align-items:center;justify-content:center;
   border-radius:50%;
   transition:background .3s;
-  z-index:2001;
 }
 .lightbox-close:hover{background:rgba(255,255,255,.1)}
 
@@ -843,7 +849,6 @@ img{display:block;max-width:100%;height:auto}
   display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;
   transition:opacity .5s;
-  padding:20px;
 }
 .easter.show{opacity:1;pointer-events:auto}
 .easter-inner{
@@ -856,7 +861,6 @@ img{display:block;max-width:100%;height:auto}
   position:relative;
   transform:scale(.8);
   transition:transform .6s cubic-bezier(.2,.7,.2,1);
-  max-width:90vw;
 }
 .easter.show .easter-inner{transform:scale(1)}
 .easter-inner::before,
@@ -899,13 +903,10 @@ img{display:block;max-width:100%;height:auto}
   cursor:pointer;
   border-radius:2px;
   transition:all .3s;
-  min-height:44px;
 }
 .easter-close:hover{background:var(--accent)}
 
-/* ========================================================
-   平板 900px
-   ======================================================== */
+/* ============ 响应式 ============ */
 @media (max-width: 900px){
   .page{padding:80px 20px}
   .page-grid{grid-template-columns:1fr;gap:40px}
@@ -930,154 +931,11 @@ img{display:block;max-width:100%;height:auto}
   .box-body{height:140px}
   .opening-letter-inner{padding:40px 36px}
 }
-
-/* ========================================================
-   手机端 (480px) — 强化优化
-   ======================================================== */
 @media (max-width: 480px){
-  body{font-size:15px;line-height:1.75}
-  html{font-size:15px}
-
-  /* 修复 2.7:噪点降透明 + 不 fixed */
-  .paper-grain{opacity:.15}
-
-  .cover{padding:60px 22px 100px}
-  .cover-title .t-line{letter-spacing:.2em;font-size:clamp(54px, 18vw, 88px)}
-  .cover-from{margin-bottom:36px;font-size:11px}
-  .cover-date{margin-bottom:14px;font-size:11px}
-  .cover-sub{margin-top:18px;font-size:14px;letter-spacing:.2em}
-  .cover-quote{font-size:17px;line-height:2;margin-top:32px}
-  .cover-meta{margin-top:36px;font-size:11px;letter-spacing:.18em}
-  .cover-meta .dot{margin:0 8px}
-  .cover-underline{margin-top:32px}
-  .cover-frame{inset:20px}
-  .scroll-hint{margin-top:60px;font-size:11px}
-
-  .box{width:240px;height:160px}
-  .box-lid{height:52px}
-  .box-body{height:128px}
-  .box-pattern{gap:10px}
-  .box-pattern .pup{width:8px;height:8px}
-  .box-brand{font-size:11px;letter-spacing:.3em}
-  .box-front-art .bear{font-size:24px}
-  .box-front-text{font-size:11px;letter-spacing:.3em}
-  .opening-stage{gap:40px}
-  .open-hint{font-size:14px}
-  .open-hint .open-from{font-size:10px;letter-spacing:.2em}
-
-  .opening-letter{padding:16px}
-  .opening-letter-inner{padding:32px 24px}
-  .opening-letter-inner::before{inset:14px}
-  .letter-corner{width:14px;height:14px}
-  .letter-corner-tl{top:10px;left:10px}
-  .letter-corner-tr{top:10px;right:10px}
-  .letter-corner-bl{bottom:10px;left:10px}
-  .letter-corner-br{bottom:10px;right:10px}
-  .opening-to{font-size:14px;margin-bottom:8px}
-  .opening-body{font-size:17px;line-height:1.7;margin-bottom:14px}
-  .opening-sign{font-size:13px}
-
-  .toc{padding:60px 18px}
-  .sec-title{font-size:24px;letter-spacing:.1em}
-  .sec-sub{font-size:15px;margin-bottom:36px}
-  .toc-list li{grid-template-columns:32px 1fr;gap:10px;padding:14px 0}
-  .toc-list .k{font-size:18px}
-  .toc-list .n{font-size:17px;letter-spacing:.05em}
-  .toc-list .d{font-size:12px;padding-left:42px;margin-top:-4px}
-
-  .page{padding:56px 18px}
-  .page-side{margin-bottom:32px;justify-content:flex-start}
-  .page-tag{font-size:11px;letter-spacing:.25em;padding-right:0}
-  .page-tag::before{width:18px}
-  .page-grid{gap:28px}
-  .t-num{font-size:36px;margin-bottom:2px}
-  .t-name{font-size:30px;letter-spacing:.04em;line-height:1.2;margin-bottom:6px}
-  .t-en{font-size:13px;margin-bottom:24px;padding-bottom:18px}
-  .t-poem{font-size:18px;line-height:1.85;margin-bottom:18px}
-  .t-desc{font-size:14.5px;line-height:1.95;margin-bottom:18px}
-  .t-desc em{font-size:15px}
-  .t-foot{font-size:13px;margin-top:24px;padding-top:18px}
-  .btn-view{
-    padding:11px 18px;font-size:14px;width:100%;
-    justify-content:center;margin-top:18px;
-  }
-
-  .polaroid{padding:12px 12px 42px}
-  .polaroid .caption{font-size:13px;bottom:14px}
-
-  .hero{padding:64px 18px}
-  .hero-title{font-size:48px;letter-spacing:.1em;margin-bottom:14px}
-  .hero-sub{font-size:18px;line-height:1.7;margin-bottom:48px}
-  .hero-overlay{padding:24px 20px;margin-top:-60px}
-  .bigcount{gap:10px;margin-bottom:10px}
-  .bigcount .num{font-size:64px}
-  .bigcount .unit{font-size:18px;letter-spacing:.3em}
-  .bigquote{font-size:18px;letter-spacing:.3em}
-  .hero-art{margin-bottom:48px}
-  .hero-desc{font-size:14px;line-height:2;margin-bottom:20px}
-
-  .letter{padding:60px 16px}
-  .letter-inner{padding:36px 22px}
-  .letter-inner::before{top:20px}
-  .letter-inner::after{bottom:20px}
-  .letter-title{font-size:24px;letter-spacing:.1em;margin-bottom:36px}
-  .letter-body{font-size:14.5px;line-height:2.1;letter-spacing:.02em}
-  .letter-body p{margin-bottom:14px}
-  .letter-body p:first-child:first-letter{font-size:20px}
-  .letter-sign{font-size:16px !important;margin-top:36px !important}
-  .letter-sign .sign-name{font-size:22px}
-  .letter-sign .sign-date{font-size:12px}
-
-  .footer{padding:60px 18px 50px}
-  .footer-stamp{width:68px;height:68px;font-size:26px;line-height:68px;margin-bottom:28px}
-  .footer-text{font-size:15px;line-height:2;margin-bottom:32px}
-  .footer-end{font-size:11px;letter-spacing:.3em}
-  .footer-secret{font-size:11px;margin-top:36px}
-
-  .lightbox{padding:20px}
-  .lightbox-close{top:14px;right:14px;width:44px;height:44px;font-size:30px}
-  .lightbox-img{border:4px solid #fff;max-height:70vh}
-  .lightbox-cap{font-size:14px;margin-top:14px}
-
-  .easter-inner{padding:36px 28px}
-  .easter-emoji{font-size:44px;margin-bottom:18px}
-  .easter-text{font-size:26px;letter-spacing:.05em}
-  .easter-sub{font-size:13px;margin-bottom:22px}
-  .easter-close{padding:11px 24px;font-size:14px}
-
-  .progress{height:1.5px}
-}
-
-/* 修复 2.8:超小屏字体回退到系统楷体,不依赖远程字体加载 */
-@media (max-width: 480px){
-  :root{
-    --font-kai:"KaiTi","STKaiti","FangSong","Songti SC",serif;
-    --font-hand:"KaiTi","STKaiti","FangSong",cursive;
-  }
-}
-
-/* 320px */
-@media (max-width: 360px){
-  body{font-size:14px}
-  .cover{padding:50px 16px 80px}
-  .cover-title .t-line{font-size:48px}
-  .opening-letter-inner{padding:24px 18px}
-  .opening-body{font-size:15px}
-  .t-name{font-size:26px}
-  .t-poem{font-size:16px}
-  .letter-inner{padding:30px 18px}
-  .hero-title{font-size:38px}
-}
-
-/* iPad 横屏 */
-@media (min-width: 768px) and (orientation: landscape){
-  .opening{min-height:80vh}
-}
-
-/* 减弱动效(尊重用户偏好) */
-@media (prefers-reduced-motion: reduce){
-  *,*::before,*::after{
-    animation-duration:.01ms !important;
-    transition-duration:.01ms !important;
-  }
+  .cover-title .t-line{letter-spacing:.2em}
+  .hero-title{letter-spacing:.1em}
+  .letter-inner{padding:40px 22px}
+  .footer-stamp{width:72px;height:72px;line-height:72px;font-size:28px}
+  .opening-letter-inner{padding:30px 24px}
+  .opening-body{font-size:18px}
 }
