@@ -288,3 +288,37 @@ if(canvas){
   }, { threshold: 0.05 });
   heroObserver.observe(canvas.parentElement);
 }
+// 11. 背景音乐(网易云外链)
+const bgm = document.getElementById('bgm');
+const musicBtn = document.getElementById('musicToggle');
+bgm.volume = 0.25;
+
+let musicStarted = false;
+function startMusic(){
+  if(musicStarted) return;
+  musicStarted = true;
+  bgm.play().then(()=>{
+    musicBtn.classList.add('playing');
+    musicBtn.classList.remove('off');
+  }).catch(()=>{
+    // 自动播放被拒,等首次用户交互
+    musicStarted = false;
+  });
+}
+function pauseMusic(){
+  bgm.pause();
+  musicBtn.classList.remove('playing');
+  musicBtn.classList.add('off');
+}
+function toggleMusic(){
+  if(bgm.paused){ startMusic(); } else { pauseMusic(); }
+}
+musicBtn.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  toggleMusic();
+});
+// 首次任意点击启动音乐(浏览器自动播放策略)
+document.addEventListener('click', function once(){
+  if(!musicStarted) startMusic();
+  document.removeEventListener('click', once);
+}, { once:true });
