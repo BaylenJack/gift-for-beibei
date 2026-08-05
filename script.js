@@ -1,6 +1,12 @@
 /* =========================================
    致贝贝 · 入场动效 · 开箱 · 名字雨 · 灯箱 · 彩蛋
+   桌面端完整 / 手机端降级 / 不丢失效果
    ========================================= */
+
+// 0. 性能检测
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+                 || (window.innerWidth < 768);
+const isLowPerf = isMobile || (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4);
 
 // 1. 滚动入场
 const io = new IntersectionObserver((entries)=>{
@@ -10,7 +16,7 @@ const io = new IntersectionObserver((entries)=>{
       io.unobserve(e.target);
     }
   });
-}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
 const targets = document.querySelectorAll(
   '.cover-title, .cover-sub, .cover-quote, .cover-meta, .scroll-hint, ' +
@@ -21,15 +27,22 @@ const targets = document.querySelectorAll(
 targets.forEach(t=>t.classList.add('reveal'));
 targets.forEach(t=>io.observe(t));
 
-// 2. 顶部进度条
+// 2. 顶部进度条(用 transform 而非 width,GPU 加速)
 const bar = document.getElementById('bar');
+let ticking = false;
 function updateBar(){
   const h = document.documentElement;
   const sc = h.scrollTop || document.body.scrollTop;
   const max = (h.scrollHeight - h.clientHeight) || 1;
-  bar.style.width = (sc / max * 100) + '%';
+  bar.style.transform = `scaleX(${sc / max})`;
+  ticking = false;
 }
-window.addEventListener('scroll', updateBar, { passive:true });
+window.addEventListener('scroll', ()=>{
+  if(!ticking){
+    requestAnimationFrame(updateBar);
+    ticking = true;
+  }
+}, { passive:true });
 
 // 3. 520 计数
 const numEl = document.querySelector('.bigcount .num');
@@ -55,27 +68,30 @@ const cIo = new IntersectionObserver((es)=>{
 }, { threshold: 0.4 });
 if(numEl) cIo.observe(numEl);
 
-// 4. 拍立得轻微视差
+// 4. 拍立得视差 —— 手机端禁用(避免触发重绘)
 const polaroids = document.querySelectorAll('.polaroid');
-polaroids.forEach(p=>{
-  const tilt = parseFloat(p.dataset.tilt || 0);
-  p.style.transform = `rotate(${tilt}deg)`;
-  p.addEventListener('mousemove', (e)=>{
-    const r = p.getBoundingClientRect();
-    const cx = e.clientX - (r.left + r.width/2);
-    const cy = e.clientY - (r.top + r.height/2);
-    const max = 6;
-    const rx = Math.max(-max, Math.min(max, -cy/20));
-    const ry = Math.max(-max, Math.min(max, cx/20));
-    p.style.transform = `rotate(${tilt}deg) rotateX(${rx}deg) rotateY(${ry}deg)`;
-  });
-  p.addEventListener('mouseleave', ()=>{
+if(!isMobile){
+  polaroids.forEach(p=>{
+    const tilt = parseFloat(p.dataset.tilt || 0);
     p.style.transform = `rotate(${tilt}deg)`;
+    p.addEventListener('mousemove', (e)=>{
+      const r = p.getBoundingClientRect();
+      const cx = e.clientX - (r.left + r.width/2);
+      const cy = e.clientY - (r.top + r.height/2);
+      const max = 6;
+      const rx = Math.max(-max, Math.min(max, -cy/20));
+      const ry = Math.max(-max, Math.min(max, cx/20));
+      p.style.transform = `rotate(${tilt}deg) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+    p.addEventListener('mouseleave', ()=>{
+      p.style.transform = `rotate(${tilt}deg)`;
+    });
   });
-});
+}
 
-// 5. 浮动的微小心形 / 圆点
+// 5. 浮动粒子 —— 移动端降低频率 + 减少数量
 (function sprinkle(){
+  if(isLowPerf) return; // 低端机直接关闭
   const colors = ['#b14233','#b08a3e','#7a93b3','#d77e6e'];
   const layer = document.createElement('div');
   layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:1499;overflow:hidden';
@@ -95,7 +111,7 @@ polaroids.forEach(p=>{
       color:${color};
       font-size:${size}px;
       opacity:0;
-      font-family:'Ma Shan Zheng',serif;
+      font-family:'Ma Shan Zheng','KaiTi',serif;
       animation:floatUp ${dur}s linear ${delay}s forwards;
       will-change:transform,opacity;
     `;
@@ -115,11 +131,11 @@ polaroids.forEach(p=>{
     `;
     document.head.appendChild(s);
   }
-  setInterval(spawn, 1600);
-  for(let i=0;i<4;i++) setTimeout(spawn, i*400);
+  setInterval(spawn, isMobile ? 3200 : 1600);
+  for(let i=0;i<3;i++) setTimeout(spawn, i*500);
 })();
 
-// 6. 顺序：开箱 → 显示信 → 自动翻页
+// 6. 顺序:开箱 → 显示信
 (function opening(){
   const box = document.getElementById('box');
   const hint = document.getElementById('openHint');
@@ -134,27 +150,12 @@ polaroids.forEach(p=>{
     setTimeout(()=>{ letter.classList.add('show'); }, 900);
   }
 
-  // 点击 / 触摸 打开
   box.addEventListener('click', open);
   box.addEventListener('touchstart', open, {passive:true});
-
-  // 键盘空格也开
   document.addEventListener('keydown', (e)=>{
     if((e.code === 'Space' || e.code === 'Enter') && !opened) open();
   });
-
-  // 8 秒后如果还没开,自动打开
   setTimeout(()=>{ if(!opened) open(); }, 8000);
-
-  // 显示信 4 秒后,自动向下滚动到封面
-  setTimeout(()=>{
-    const goDown = document.getElementById('cover');
-    if(goDown){
-      const doScroll = ()=> goDown.scrollIntoView({behavior:'smooth', block:'start'});
-      // 给用户多看一眼的机会
-      window.__openScroll = doScroll;
-    }
-  }, 400);
 })();
 
 // 7. 目录点击跳转
@@ -166,39 +167,45 @@ document.querySelectorAll('.toc-list li[data-go]').forEach(li=>{
   });
 });
 
-// 8. 全屏灯箱
+// 8. 全屏灯箱(支持 webp)
 const lb = document.getElementById('lightbox');
 const lbImg = document.getElementById('lightboxImg');
+const lbWebp = document.getElementById('lightboxWebp');
 const lbCap = document.getElementById('lightboxCap');
 const lbClose = document.getElementById('lightboxClose');
 
 document.querySelectorAll('.btn-view').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    lbImg.src = btn.dataset.img;
+  btn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const jpg = btn.dataset.img;
+    const webp = btn.dataset.imgWebp;
+    lbImg.src = jpg;
+    if(webp){ lbWebp.srcset = `${webp} 1x, ${webp.replace('.webp','@2x.webp')} 2x`; }
     lbCap.textContent = btn.dataset.caption || '';
     lb.classList.add('show');
+    document.body.style.overflow = 'hidden';
   });
 });
-function closeLb(){ lb.classList.remove('show'); lbImg.src = ''; }
+function closeLb(){
+  lb.classList.remove('show');
+  lbImg.src = '';
+  lbWebp.srcset = '';
+  document.body.style.overflow = '';
+}
 lbClose.addEventListener('click', closeLb);
 lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLb(); });
 document.addEventListener('keydown', (e)=>{ if(e.code === 'Escape') closeLb(); });
 
-// 9. 彩蛋:任意位置连点 5 次 / 长按 footer-secret
+// 9. 彩蛋
 const easter = document.getElementById('easter');
 const easterClose = document.getElementById('easterClose');
 const secret = document.getElementById('footerSecret');
 
-function showEaster(){
-  easter.classList.add('show');
-}
-function hideEaster(){
-  easter.classList.remove('show');
-}
+function showEaster(){ easter.classList.add('show'); document.body.style.overflow='hidden'; }
+function hideEaster(){ easter.classList.remove('show'); document.body.style.overflow=''; }
 easterClose.addEventListener('click', hideEaster);
 easter.addEventListener('click', (e)=>{ if(e.target === easter) hideEaster(); });
 
-// 方式一:连点 footer-secret 5 次
 let clicks = 0, clickTimer;
 secret.addEventListener('click', ()=>{
   clicks++;
@@ -206,10 +213,8 @@ secret.addEventListener('click', ()=>{
   clickTimer = setTimeout(()=>clicks = 0, 1500);
   if(clicks >= 5){ showEaster(); clicks = 0; }
 });
-// 方式二:页面任意位置连点 7 次
 let globalClicks = 0, gTimer;
 document.addEventListener('click', (e)=>{
-  // 不算灯箱里的点击
   if(e.target.closest('.lightbox') || e.target.closest('.easter') || e.target.closest('.box')) return;
   globalClicks++;
   clearTimeout(gTimer);
@@ -217,17 +222,19 @@ document.addEventListener('click', (e)=>{
   if(globalClicks >= 7){ showEaster(); globalClicks = 0; }
 });
 
-// 10. 名字雨 canvas (只在 hero 区可见时启动)
+// 10. 名字雨 canvas —— 移动端降密度
 const canvas = document.getElementById('nameRain');
 if(canvas){
   const ctx = canvas.getContext('2d');
   let drops = [];
   let running = false;
   let lastW = 0, lastH = 0;
+  const MAX_DROPS = isMobile ? 18 : 60;
+  const SPAWN_RATE = isMobile ? 0.18 : 0.4;
 
   function resize(){
     const rect = canvas.parentElement.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
     canvas.style.width = rect.width + 'px';
@@ -236,14 +243,18 @@ if(canvas){
     lastW = rect.width; lastH = rect.height;
   }
   resize();
-  window.addEventListener('resize', resize);
+  let resizeTimer;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 200);
+  });
 
   function spawn(){
     return {
       x: Math.random() * lastW,
       y: -20 - Math.random() * 100,
       v: .6 + Math.random() * 1.4,
-      size: 14 + Math.random() * 10,
+      size: isMobile ? 12 + Math.random() * 6 : 14 + Math.random() * 10,
       alpha: .2 + Math.random() * .5,
       rot: (Math.random()-.5) * 30,
       vrot: (Math.random()-.5) * .6,
@@ -254,8 +265,7 @@ if(canvas){
   function step(){
     if(!running) return;
     ctx.clearRect(0,0,lastW,lastH);
-    // 限制同时存在数量
-    if(drops.length < 60 && Math.random() < .4) drops.push(spawn());
+    if(drops.length < MAX_DROPS && Math.random() < SPAWN_RATE) drops.push(spawn());
     drops = drops.filter(d => d.y < lastH + 30);
     drops.forEach(d=>{
       d.y += d.v;
@@ -264,7 +274,6 @@ if(canvas){
       ctx.translate(d.x, d.y);
       ctx.rotate(d.rot * Math.PI / 180);
       ctx.font = `${d.size}px "Ma Shan Zheng","KaiTi",serif`;
-      // 颜色:大部分朱砂,小部分金
       ctx.fillStyle = d.tone < .25 ? `rgba(177,66,51,${d.alpha})` : `rgba(43,38,32,${d.alpha*.4})`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
