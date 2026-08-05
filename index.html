@@ -541,6 +541,21 @@
   </div>
 </div>
 
+<!-- ============ 背景音乐 ============ -->
+<audio id="bgm" preload="auto" loop playsinline
+       src="https://music.163.com/song/media/outer/url?id=1299980643.mp3"></audio>
+
+<!-- 音乐开关按钮 -->
+<button class="music-toggle" id="musicToggle" aria-label="背景音乐开关">
+  <svg class="music-note" viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+    <path d="M9 18.5a3 3 0 1 1-2-2.83V6.2a1 1 0 0 1 .76-.97l9-2.25A1 1 0 0 1 18 3.95v10.72a3 3 0 1 1-2-2.83V8.1l-7 1.75v8.65z"/>
+  </svg>
+  <svg class="music-slash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+    <path d="M9 18.5a3 3 0 1 1-2-2.83V6.2a1 1 0 0 1 .76-.97l9-2.25A1 1 0 0 1 18 3.95v10.72a3 3 0 1 1-2-2.83V8.1l-7 1.75v8.65z"/>
+    <line x1="3" y1="3" x2="21" y2="21"/>
+  </svg>
+</button>
+
 <script src="./script.js"></script>
 </body>
 </html>
