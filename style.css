@@ -1,6 +1,6 @@
 /* =========================================
    致贝贝 · 一封从深圳寄回去的回信
-   温柔手账风 · 序章开箱 · 全屏灯箱 · 名字雨
+   桌面端惊艳 / 手机端丝滑 / 不降任何效果
    ========================================= */
 
 :root{
@@ -23,14 +23,22 @@
   --line-soft:rgba(43,38,32,.08);
   --shadow:0 30px 60px -30px rgba(43,38,32,.25), 0 8px 18px -8px rgba(43,38,32,.15);
   --shadow-deep:0 50px 100px -40px rgba(43,38,32,.45);
-  --font-zh:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
-  --font-kai:"Ma Shan Zheng","KaiTi","STKaiti",serif;
-  --font-hand:"Long Cang","Ma Shan Zheng",cursive;
-  --font-en:"Cormorant Garamond","Noto Serif SC",serif;
-  --font-mono:"ZCOOL XiaoWei",serif;
+  /* 本地化字体栈:Google Fonts 加载失败时回退到系统字体 */
+  --font-zh:"Noto Serif SC","Songti SC","STSong","Source Han Serif SC","SimSun","PingFang SC",serif;
+  --font-kai:"Ma Shan Zheng","KaiTi","STKaiti","FangSong","STSong","Noto Serif SC",cursive,serif;
+  --font-hand:"Long Cang","Ma Shan Zheng","KaiTi","STKaiti",cursive;
+  --font-en:"Cormorant Garamond","Georgia","Times New Roman",serif;
+}
+
+/* 关键:Google Fonts 不阻塞渲染 */
+@font-face{
+  font-family:'fallback-kai';
+  src:local('KaiTi'),local('STKaiti'),local('FangSong'),local('STSong');
+  font-display:swap;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{background:var(--paper);color:var(--ink);overflow-x:hidden}
 body{
   font-family:var(--font-zh);
@@ -38,6 +46,7 @@ body{
   line-height:1.85;
   letter-spacing:.02em;
   -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
   background:
     radial-gradient(ellipse at 20% 10%, rgba(176,138,62,.06), transparent 50%),
     radial-gradient(ellipse at 80% 90%, rgba(122,147,179,.06), transparent 50%),
@@ -45,6 +54,9 @@ body{
   position:relative;
 }
 
+img{display:block;max-width:100%;height:auto}
+
+/* 噪点 — 手机端降低不透明度减少重绘开销 */
 .paper-grain{
   position:fixed;inset:0;pointer-events:none;z-index:1500;
   opacity:.35;mix-blend-mode:multiply;
@@ -59,12 +71,13 @@ body{
   display:block;height:100%;
   background:linear-gradient(90deg, var(--accent), var(--gold));
   width:0;transition:width .12s linear;
+  transform-origin:left;
 }
 
 /* ============ 序章 · 开箱 ============ */
 .opening{
   position:relative;
-  height:100vh;min-height:720px;
+  min-height:100vh;min-height:100svh;
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;
   background:
@@ -83,15 +96,16 @@ body{
   display:flex;flex-direction:column;align-items:center;gap:60px;
 }
 
-/* —— 礼盒 —— */
 .box{
   position:relative;
   width:320px;height:220px;
   perspective:1200px;
   cursor:pointer;
   transition:transform .8s cubic-bezier(.2,.7,.2,1);
+  transform:translateZ(0); /* GPU 加速 */
 }
-.box:hover{transform:translateY(-6px)}
+.box:hover{transform:translateY(-6px) translateZ(0)}
+.box:active{transform:translateY(-2px) scale(.98) translateZ(0)}
 
 .box-lid{
   position:absolute;left:0;right:0;top:0;
@@ -102,6 +116,7 @@ body{
   transform-origin:bottom center;
   transition:transform 1.2s cubic-bezier(.5,-0.2,.4,1.4);
   z-index:3;
+  will-change:transform;
 }
 .box-face{
   position:absolute;inset:0;
@@ -111,9 +126,7 @@ body{
   border-radius:6px 6px 0 0;
   padding:8px;
 }
-.box-pattern{
-  display:flex;gap:14px;
-}
+.box-pattern{display:flex;gap:14px}
 .box-pattern .pup{
   width:10px;height:10px;border-radius:50%;
   background:rgba(255,255,255,.7);
@@ -177,7 +190,6 @@ body{
   z-index:1;
 }
 
-/* 开箱状态 */
 .box.opened .box-lid{
   transform:rotateX(-110deg) translateY(-30px) translateZ(20px);
 }
@@ -194,7 +206,6 @@ body{
   75%{transform:translateY(-2px)}
 }
 
-/* 开箱提示 */
 .open-hint{
   text-align:center;
   font-family:var(--font-hand);
@@ -203,6 +214,8 @@ body{
   letter-spacing:.15em;
   animation:hint 2.4s ease-in-out infinite;
   transition:opacity .6s;
+  user-select:none;
+  -webkit-user-select:none;
 }
 .open-hint .open-line{
   width:1px;height:30px;
@@ -225,13 +238,13 @@ body{
   50%{transform:translateY(-6px);opacity:1}
 }
 
-/* 序章里的信 */
 .opening-letter{
   position:absolute;inset:0;
   display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;
   transition:opacity 1s ease .8s;
   z-index:5;
+  padding:20px;
 }
 .opening-letter.show{opacity:1}
 .opening-letter-inner{
@@ -240,7 +253,7 @@ body{
   padding:60px 80px;
   border:1px solid var(--line-soft);
   box-shadow:var(--shadow-deep);
-  max-width:560px;
+  max-width:560px;width:100%;
   transform:scale(.85) translateY(40px);
   transition:transform 1.2s cubic-bezier(.2,.7,.2,1) .8s;
 }
@@ -282,7 +295,7 @@ body{
 
 /* ============ 封面 ============ */
 .cover{
-  min-height:100vh;
+  min-height:100vh;min-height:100svh;
   display:flex;align-items:center;justify-content:center;
   text-align:center;
   padding:80px 24px;
@@ -372,7 +385,7 @@ body{
   50%{transform:translate(-50%,6px);opacity:1}
 }
 
-/* ============ 通用：节序号 ============ */
+/* ============ 通用 ============ */
 .sec-num{
   font-family:var(--font-en);
   font-style:italic;
@@ -382,9 +395,7 @@ body{
   margin-bottom:20px;
   text-align:center;
 }
-.sec-title,.sec-sub{
-  text-align:center;
-}
+.sec-title,.sec-sub{text-align:center}
 .sec-title{
   font-family:var(--font-kai);
   font-size:clamp(28px,4vw,42px);
@@ -420,30 +431,11 @@ body{
   cursor:pointer;
   transition:all .4s;
   position:relative;
-  padding-left:0;
 }
-.toc-list li:hover{
-  padding-left:14px;
-  border-bottom-color:var(--accent);
-}
-.toc-list .k{
-  font-family:var(--font-kai);
-  color:var(--accent);
-  font-size:22px;
-}
-.toc-list .n{
-  font-family:var(--font-kai);
-  font-size:22px;
-  color:var(--ink);
-  letter-spacing:.12em;
-}
-.toc-list .d{
-  font-family:var(--font-hand);
-  color:var(--ink-light);
-  font-size:14px;
-  letter-spacing:.1em;
-  text-align:right;
-}
+.toc-list li:hover{padding-left:14px;border-bottom-color:var(--accent)}
+.toc-list .k{font-family:var(--font-kai);color:var(--accent);font-size:22px}
+.toc-list .n{font-family:var(--font-kai);font-size:22px;color:var(--ink);letter-spacing:.12em}
+.toc-list .d{font-family:var(--font-hand);color:var(--ink-light);font-size:14px;letter-spacing:.1em;text-align:right}
 
 /* ============ 礼物页 ============ */
 .page{
@@ -454,10 +446,7 @@ body{
 }
 .page:nth-of-type(odd){background:rgba(176,138,62,.025)}
 
-.page-side{
-  display:flex;justify-content:flex-end;
-  margin-bottom:60px;
-}
+.page-side{display:flex;justify-content:flex-end;margin-bottom:60px}
 .page-tag{
   font-family:var(--font-en);
   font-style:italic;
@@ -467,10 +456,7 @@ body{
   display:flex;align-items:center;gap:14px;
   padding-right:8px;
 }
-.page-tag::before{
-  content:"";width:30px;height:1px;
-  background:var(--accent);
-}
+.page-tag::before{content:"";width:30px;height:1px;background:var(--accent)}
 .page-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -541,19 +527,19 @@ body{
   background:transparent;
   border:1px solid var(--ink);
   color:var(--ink);
-  padding:10px 18px;
+  padding:12px 22px;
   font-family:var(--font-kai);
-  font-size:14px;
+  font-size:15px;
   letter-spacing:.15em;
   cursor:pointer;
   transition:all .3s;
+  min-height:44px; /* iOS 推荐的最小触控区 */
+  -webkit-tap-highlight-color:transparent;
 }
-.btn-view:hover{
-  background:var(--ink);
-  color:var(--paper);
-}
+.btn-view:hover{background:var(--ink);color:var(--paper)}
+.btn-view:active{transform:scale(.97)}
 
-/* 拍立得相片 */
+/* 拍立得 */
 .polaroid{
   background:#fbf6ea;
   padding:18px 18px 56px;
@@ -561,10 +547,12 @@ body{
   position:relative;
   transition:transform .8s cubic-bezier(.2,.7,.2,1);
   transform-style:preserve-3d;
+  will-change:transform;
 }
 .polaroid img{
   width:100%;height:auto;display:block;
   filter:saturate(.92) contrast(.95);
+  background:#f0e9d4; /* 加载占位色 */
 }
 .polaroid .caption{
   position:absolute;left:0;right:0;bottom:18px;
@@ -580,7 +568,7 @@ body{
   pointer-events:none;
 }
 
-/* ============ 玖 · 高潮页 ============ */
+/* ============ 玖 · 高潮 ============ */
 .hero{
   padding:140px 24px;
   background:linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
@@ -622,6 +610,7 @@ body{
   border-radius:2px;
   box-shadow:var(--shadow);
   filter:saturate(.95) contrast(.95);
+  background:#f0e9d4;
 }
 .hero-overlay{
   position:absolute;left:50%;top:50%;
@@ -657,7 +646,6 @@ body{
   letter-spacing:.5em;
   padding-left:.5em;
 }
-
 .hero-desc{
   font-family:var(--font-zh);
   font-weight:300;
@@ -799,6 +787,9 @@ body{
   cursor:pointer;
   opacity:.5;
   transition:opacity .4s;
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
 }
 .footer-secret:hover{opacity:1}
 
@@ -817,6 +808,7 @@ body{
   padding:40px;
 }
 .lightbox.show{opacity:1;pointer-events:auto}
+.lightbox-pic{display:flex;justify-content:center}
 .lightbox-img{
   max-width:90vw;max-height:80vh;
   object-fit:contain;
@@ -829,6 +821,7 @@ body{
   font-family:var(--font-hand);
   font-size:18px;
   letter-spacing:.15em;
+  text-align:center;
 }
 .lightbox-close{
   position:absolute;top:30px;right:30px;
@@ -838,6 +831,7 @@ body{
   display:flex;align-items:center;justify-content:center;
   border-radius:50%;
   transition:background .3s;
+  z-index:2001;
 }
 .lightbox-close:hover{background:rgba(255,255,255,.1)}
 
@@ -849,6 +843,7 @@ body{
   display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;
   transition:opacity .5s;
+  padding:20px;
 }
 .easter.show{opacity:1;pointer-events:auto}
 .easter-inner{
@@ -861,6 +856,7 @@ body{
   position:relative;
   transform:scale(.8);
   transition:transform .6s cubic-bezier(.2,.7,.2,1);
+  max-width:90vw;
 }
 .easter.show .easter-inner{transform:scale(1)}
 .easter-inner::before,
@@ -903,10 +899,13 @@ body{
   cursor:pointer;
   border-radius:2px;
   transition:all .3s;
+  min-height:44px;
 }
 .easter-close:hover{background:var(--accent)}
 
-/* ============ 响应式 ============ */
+/* ========================================================
+   平板断点 900px
+   ======================================================== */
 @media (max-width: 900px){
   .page{padding:80px 20px}
   .page-grid{grid-template-columns:1fr;gap:40px}
@@ -931,11 +930,161 @@ body{
   .box-body{height:140px}
   .opening-letter-inner{padding:40px 36px}
 }
+
+/* ========================================================
+   华为手机端深度优化 (360-480px)
+   ======================================================== */
 @media (max-width: 480px){
-  .cover-title .t-line{letter-spacing:.2em}
-  .hero-title{letter-spacing:.1em}
-  .letter-inner{padding:40px 22px}
-  .footer-stamp{width:72px;height:72px;line-height:72px;font-size:28px}
-  .opening-letter-inner{padding:30px 24px}
-  .opening-body{font-size:18px}
+  /* 基础字号 */
+  body{font-size:15px;line-height:1.75}
+  html{font-size:15px}
+
+  /* 全局更紧凑 */
+  .cover{padding:60px 22px}
+  .cover-title .t-line{letter-spacing:.2em;font-size:clamp(54px, 18vw, 88px)}
+  .cover-from{margin-bottom:36px;font-size:11px}
+  .cover-date{margin-bottom:14px;font-size:11px}
+  .cover-sub{margin-top:18px;font-size:14px;letter-spacing:.2em}
+  .cover-quote{font-size:17px;line-height:2;margin-top:32px}
+  .cover-meta{margin-top:36px;font-size:11px;letter-spacing:.18em}
+  .cover-meta .dot{margin:0 8px}
+  .cover-underline{margin-top:32px}
+  .cover-frame{inset:20px}
+
+  /* 礼盒更小 */
+  .box{width:240px;height:160px}
+  .box-lid{height:52px}
+  .box-body{height:128px}
+  .box-pattern{gap:10px}
+  .box-pattern .pup{width:8px;height:8px}
+  .box-brand{font-size:11px;letter-spacing:.3em}
+  .box-front-art .bear{font-size:24px}
+  .box-front-text{font-size:11px;letter-spacing:.3em}
+  .opening-stage{gap:40px}
+  .open-hint{font-size:14px}
+  .open-hint .open-from{font-size:10px;letter-spacing:.2em}
+
+  /* 信 */
+  .opening-letter{padding:16px}
+  .opening-letter-inner{padding:32px 24px}
+  .opening-letter-inner::before{inset:14px}
+  .letter-corner{width:14px;height:14px}
+  .letter-corner-tl{top:10px;left:10px}
+  .letter-corner-tr{top:10px;right:10px}
+  .letter-corner-bl{bottom:10px;left:10px}
+  .letter-corner-br{bottom:10px;right:10px}
+  .opening-to{font-size:14px;margin-bottom:8px}
+  .opening-body{font-size:17px;line-height:1.7;margin-bottom:14px}
+  .opening-sign{font-size:13px}
+
+  /* 目录 */
+  .toc{padding:60px 18px}
+  .sec-title{font-size:24px;letter-spacing:.1em}
+  .sec-sub{font-size:15px;margin-bottom:36px}
+  .toc-list li{grid-template-columns:32px 1fr;gap:10px;padding:14px 0}
+  .toc-list .k{font-size:18px}
+  .toc-list .n{font-size:17px;letter-spacing:.05em}
+  .toc-list .d{font-size:12px;padding-left:42px;margin-top:-4px}
+
+  /* 礼物页 */
+  .page{padding:56px 18px}
+  .page-side{margin-bottom:32px;justify-content:flex-start}
+  .page-tag{font-size:11px;letter-spacing:.25em;padding-right:0}
+  .page-tag::before{width:18px}
+  .page-grid{gap:28px}
+  .t-num{font-size:36px;margin-bottom:2px}
+  .t-name{font-size:30px;letter-spacing:.04em;line-height:1.2;margin-bottom:6px}
+  .t-en{font-size:13px;margin-bottom:24px;padding-bottom:18px}
+  .t-poem{font-size:18px;line-height:1.85;margin-bottom:18px}
+  .t-desc{font-size:14.5px;line-height:1.95;margin-bottom:18px}
+  .t-desc em{font-size:15px}
+  .t-foot{font-size:13px;margin-top:24px;padding-top:18px}
+  .btn-view{
+    padding:11px 18px;
+    font-size:14px;
+    width:100%;
+    justify-content:center;
+    margin-top:18px;
+  }
+
+  /* 拍立得 */
+  .polaroid{padding:12px 12px 42px}
+  .polaroid .caption{font-size:13px;bottom:14px}
+
+  /* 高潮 */
+  .hero{padding:64px 18px}
+  .hero-title{font-size:48px;letter-spacing:.1em;margin-bottom:14px}
+  .hero-sub{font-size:18px;line-height:1.7;margin-bottom:48px}
+  .hero-overlay{padding:24px 20px;margin-top:-60px}
+  .bigcount{gap:10px;margin-bottom:10px}
+  .bigcount .num{font-size:64px}
+  .bigcount .unit{font-size:18px;letter-spacing:.3em}
+  .bigquote{font-size:18px;letter-spacing:.3em}
+  .hero-art{margin-bottom:48px}
+  .hero-desc{font-size:14px;line-height:2;margin-bottom:20px}
+
+  /* 感谢信 */
+  .letter{padding:60px 16px}
+  .letter-inner{padding:36px 22px}
+  .letter-inner::before{top:20px}
+  .letter-inner::after{bottom:20px}
+  .letter-title{font-size:24px;letter-spacing:.1em;margin-bottom:36px}
+  .letter-body{font-size:14.5px;line-height:2.1;letter-spacing:.02em}
+  .letter-body p{margin-bottom:14px}
+  .letter-body p:first-child:first-letter{font-size:20px}
+  .letter-sign{font-size:16px !important;margin-top:36px !important}
+  .letter-sign .sign-name{font-size:22px}
+  .letter-sign .sign-date{font-size:12px}
+
+  /* 落款 */
+  .footer{padding:60px 18px 50px}
+  .footer-stamp{width:68px;height:68px;font-size:26px;line-height:68px;margin-bottom:28px}
+  .footer-text{font-size:15px;line-height:2;margin-bottom:32px}
+  .footer-end{font-size:11px;letter-spacing:.3em}
+  .footer-secret{font-size:11px;margin-top:36px}
+
+  /* 灯箱 */
+  .lightbox{padding:20px}
+  .lightbox-close{top:14px;right:14px;width:44px;height:44px;font-size:30px}
+  .lightbox-img{border:4px solid #fff;max-height:70vh}
+  .lightbox-cap{font-size:14px;margin-top:14px}
+
+  /* 彩蛋 */
+  .easter-inner{padding:36px 28px}
+  .easter-emoji{font-size:44px;margin-bottom:18px}
+  .easter-text{font-size:26px;letter-spacing:.05em}
+  .easter-sub{font-size:13px;margin-bottom:22px}
+  .easter-close{padding:11px 24px;font-size:14px}
+
+  /* 进度条 */
+  .progress{height:1.5px}
+
+  /* 噪点降低开销 */
+  .paper-grain{opacity:.2}
+}
+
+/* 超小屏 (320px) */
+@media (max-width: 360px){
+  body{font-size:14px}
+  .cover{padding:50px 16px}
+  .cover-title .t-line{font-size:48px}
+  .opening-letter-inner{padding:24px 18px}
+  .opening-body{font-size:15px}
+  .t-name{font-size:26px}
+  .t-poem{font-size:16px}
+  .letter-inner{padding:30px 18px}
+  .hero-title{font-size:38px}
+}
+
+/* 横屏 / iPad 大屏优化 */
+@media (min-width: 768px) and (orientation: landscape){
+  .opening{min-height:80vh}
+}
+
+/* 减弱动效(尊重用户系统设置) */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    transition-duration:.01ms !important;
+  }
 }
