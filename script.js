@@ -1,6 +1,5 @@
 /* =========================================
    致贝贝 · 入场动效 · 开箱 · 名字雨 · 灯箱 · 彩蛋
-   桌面端完整 / 手机端降级 / 不丢失效果
    ========================================= */
 
 // 0. 性能检测
@@ -27,7 +26,7 @@ const targets = document.querySelectorAll(
 targets.forEach(t=>t.classList.add('reveal'));
 targets.forEach(t=>io.observe(t));
 
-// 2. 顶部进度条(用 transform 而非 width,GPU 加速)
+// 2. 顶部进度条(GPU 加速)
 const bar = document.getElementById('bar');
 let ticking = false;
 function updateBar(){
@@ -68,7 +67,7 @@ const cIo = new IntersectionObserver((es)=>{
 }, { threshold: 0.4 });
 if(numEl) cIo.observe(numEl);
 
-// 4. 拍立得视差 —— 手机端禁用(避免触发重绘)
+// 4. 拍立得视差(桌面端)
 const polaroids = document.querySelectorAll('.polaroid');
 if(!isMobile){
   polaroids.forEach(p=>{
@@ -89,9 +88,9 @@ if(!isMobile){
   });
 }
 
-// 5. 浮动粒子 —— 移动端降低频率 + 减少数量
+// 5. 浮动粒子(移动端彻底关闭)
 (function sprinkle(){
-  if(isLowPerf) return; // 低端机直接关闭
+  if(isLowPerf) return;
   const colors = ['#b14233','#b08a3e','#7a93b3','#d77e6e'];
   const layer = document.createElement('div');
   layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:1499;overflow:hidden';
@@ -131,17 +130,23 @@ if(!isMobile){
     `;
     document.head.appendChild(s);
   }
-  setInterval(spawn, isMobile ? 3200 : 1600);
+  setInterval(spawn, 1600);
   for(let i=0;i<3;i++) setTimeout(spawn, i*500);
 })();
 
-// 6. 顺序:开箱 → 显示信
+// 6. 开箱 + 浮信(修复 1.2 依赖 CSS overflow:hidden 裁剪)
 (function opening(){
   const box = document.getElementById('box');
   const hint = document.getElementById('openHint');
   const letter = document.getElementById('openingLetter');
 
   let opened = false;
+  let userScrolled = false;
+
+  // 监听滚动:如果用户在 8s 前已离开首屏,不强制开箱
+  const onScroll = ()=>{ if(window.scrollY > window.innerHeight * 0.5) userScrolled = true; };
+  window.addEventListener('scroll', onScroll, { passive:true });
+
   function open(){
     if(opened) return;
     opened = true;
@@ -155,10 +160,13 @@ if(!isMobile){
   document.addEventListener('keydown', (e)=>{
     if((e.code === 'Space' || e.code === 'Enter') && !opened) open();
   });
-  setTimeout(()=>{ if(!opened) open(); }, 8000);
+  // 修复:仅当用户仍停留在首屏时,8s 后才自动开箱
+  setTimeout(()=>{
+    if(!opened && !userScrolled) open();
+  }, 8000);
 })();
 
-// 7. 目录点击跳转
+// 7. 目录点击跳转(scroll-margin-top 8px 让位给 fixed 进度条)
 document.querySelectorAll('.toc-list li[data-go]').forEach(li=>{
   li.addEventListener('click', ()=>{
     const id = li.getAttribute('data-go');
@@ -167,7 +175,7 @@ document.querySelectorAll('.toc-list li[data-go]').forEach(li=>{
   });
 });
 
-// 8. 全屏灯箱(支持 webp)
+// 8. 全屏灯箱
 const lb = document.getElementById('lightbox');
 const lbImg = document.getElementById('lightboxImg');
 const lbWebp = document.getElementById('lightboxWebp');
@@ -180,7 +188,7 @@ document.querySelectorAll('.btn-view').forEach(btn=>{
     const jpg = btn.dataset.img;
     const webp = btn.dataset.imgWebp;
     lbImg.src = jpg;
-    if(webp){ lbWebp.srcset = `${webp} 1x, ${webp.replace('.webp','@2x.webp')} 2x`; }
+    if(webp){ lbWebp.srcset = webp; }
     lbCap.textContent = btn.dataset.caption || '';
     lb.classList.add('show');
     document.body.style.overflow = 'hidden';
@@ -222,7 +230,7 @@ document.addEventListener('click', (e)=>{
   if(globalClicks >= 7){ showEaster(); globalClicks = 0; }
 });
 
-// 10. 名字雨 canvas —— 移动端降密度
+// 10. 名字雨 canvas(移动端降密度)
 const canvas = document.getElementById('nameRain');
 if(canvas){
   const ctx = canvas.getContext('2d');
