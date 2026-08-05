@@ -2,11 +2,14 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+<meta name="theme-color" content="#f5efe3" />
+<meta name="format-detection" content="telephone=no" />
 <title>致贝贝 · 来自山东的一封回信</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Long+Cang&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@200;300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Long+Cang&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Long+Cang&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap"></noscript>
 <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -140,11 +143,14 @@
         所以叫我直接用手撕开的小心思。
       </p>
       <p class="t-foot">—— 2026.7.21，你从山东寄出</p>
-      <button class="btn-view" data-img="./images/letter.jpg" data-caption="贝贝手写信 · 2026.7.21">点我放大细看 ↗</button>
+      <button class="btn-view" data-img="./images/letter.jpg" data-img-webp="./images/letter.webp" data-caption="贝贝手写信 · 2026.7.21">点我放大细看 ↗</button>
     </div>
     <div class="page-img">
       <div class="polaroid" data-tilt="2">
-        <img src="./images/letter.jpg" alt="贝贝的手写信">
+        <picture>
+          <source srcset="./images/letter.webp 1x, ./images/letter@2x.webp 2x" type="image/webp">
+          <img src="./images/letter.jpg" srcset="./images/letter.jpg 1x, ./images/letter@2x.jpg 2x" alt="贝贝的手写信" loading="lazy" decoding="async" width="1080" height="1440">
+        </picture>
         <div class="caption">她写的第一封 · 2026.7.21</div>
       </div>
     </div>
@@ -159,7 +165,10 @@
   <div class="page-grid">
     <div class="page-img">
       <div class="polaroid" data-tilt="-3">
-        <img src="./images/edict-wrap.jpg" alt="手折辣条外包装">
+        <picture>
+          <source srcset="./images/edict-wrap.webp 1x, ./images/edict-wrap@2x.webp 2x" type="image/webp">
+          <img src="./images/edict-wrap.jpg" srcset="./images/edict-wrap.jpg 1x, ./images/edict-wrap@2x.jpg 2x" alt="手折辣条外包装" loading="lazy" decoding="async" width="1080" height="1440">
+        </picture>
         <div class="caption">被叠成圣旨的 · 黄色金封</div>
       </div>
     </div>
@@ -208,11 +217,14 @@
         特赐辣条一袋以表嘉奖！"</em>
       </p>
       <p class="t-foot">—— 我真的在上课偷吃了一口，被呛到咳嗽。</p>
-      <button class="btn-view" data-img="./images/edict-open.jpg" data-caption="御赐辣条 · 全貌">点我看辣条全貌 ↗</button>
+      <button class="btn-view" data-img="./images/edict-open.jpg" data-img-webp="./images/edict-open.webp" data-caption="御赐辣条 · 全貌">点我看辣条全貌 ↗</button>
     </div>
     <div class="page-img">
       <div class="polaroid" data-tilt="2">
-        <img src="./images/edict-open.jpg" alt="圣旨辣条">
+        <picture>
+          <source srcset="./images/edict-open.webp 1x, ./images/edict-open@2x.webp 2x" type="image/webp">
+          <img src="./images/edict-open.jpg" srcset="./images/edict-open.jpg 1x, ./images/edict-open@2x.jpg 2x" alt="圣旨辣条" loading="lazy" decoding="async" width="1080" height="810">
+        </picture>
         <div class="caption">她给朕的圣旨</div>
       </div>
     </div>
@@ -227,7 +239,10 @@
   <div class="page-grid">
     <div class="page-img">
       <div class="polaroid" data-tilt="-2">
-        <img src="./images/ugly-doll.jpg" alt="丑萌挂件">
+        <picture>
+          <source srcset="./images/ugly-doll.webp 1x, ./images/ugly-doll@2x.webp 2x" type="image/webp">
+          <img src="./images/ugly-doll.jpg" srcset="./images/ugly-doll.jpg 1x, ./images/ugly-doll@2x.jpg 2x" alt="丑萌挂件" loading="lazy" decoding="async" width="1080" height="1310">
+        </picture>
         <div class="caption">丑丑的 · 我最爱的</div>
       </div>
     </div>
@@ -278,7 +293,10 @@
     </div>
     <div class="page-img">
       <div class="polaroid" data-tilt="3">
-        <img src="./images/bone.jpg" alt="骨头挂件">
+        <picture>
+          <source srcset="./images/bone.webp 1x, ./images/bone@2x.webp 2x" type="image/webp">
+          <img src="./images/bone.jpg" srcset="./images/bone.jpg 1x, ./images/bone@2x.jpg 2x" alt="骨头挂件" loading="lazy" decoding="async" width="1080" height="1440">
+        </picture>
         <div class="caption">你给我的小骨头</div>
       </div>
     </div>
@@ -293,7 +311,10 @@
   <div class="page-grid">
     <div class="page-img">
       <div class="polaroid" data-tilt="-2">
-        <img src="./images/rabbit.jpg" alt="奶黄兔叽挂件">
+        <picture>
+          <source srcset="./images/rabbit.webp 1x, ./images/rabbit@2x.webp 2x" type="image/webp">
+          <img src="./images/rabbit.jpg" srcset="./images/rabbit.jpg 1x, ./images/rabbit@2x.jpg 2x" alt="奶黄兔叽挂件" loading="lazy" decoding="async" width="1080" height="1440">
+        </picture>
         <div class="caption">奶黄色 · 抱着挂扣的小家伙</div>
       </div>
     </div>
@@ -345,7 +366,10 @@
     </div>
     <div class="page-img">
       <div class="polaroid" data-tilt="-3">
-        <img src="./images/pen.jpg" alt="中性笔">
+        <picture>
+          <source srcset="./images/pen.webp 1x, ./images/pen@2x.webp 2x" type="image/webp">
+          <img src="./images/pen.jpg" srcset="./images/pen.jpg 1x, ./images/pen@2x.jpg 2x" alt="中性笔" loading="lazy" decoding="async" width="1080" height="1440">
+        </picture>
         <div class="caption">白色的那只 · 陪我写字</div>
       </div>
     </div>
@@ -360,7 +384,10 @@
   <div class="page-grid">
     <div class="page-img">
       <div class="polaroid" data-tilt="2">
-        <img src="./images/whale.jpg" alt="鲸鱼手机链">
+        <picture>
+          <source srcset="./images/whale.webp 1x, ./images/whale@2x.webp 2x" type="image/webp">
+          <img src="./images/whale.jpg" srcset="./images/whale.jpg 1x, ./images/whale@2x.jpg 2x" alt="鲸鱼手机链" loading="lazy" decoding="async" width="1080" height="1440">
+        </picture>
         <div class="caption">小鲸鱼 · Sweet</div>
       </div>
     </div>
@@ -393,7 +420,10 @@
     <p class="hero-sub">你手写了 520 遍 "韩天宇"。<br/>这是我见过最长的一封情书。</p>
 
     <div class="hero-art">
-      <img src="./images/labels.jpg" alt="520 个手写名字标签" class="hero-img">
+      <picture>
+        <source srcset="./images/labels.webp 1x, ./images/labels@2x.webp 2x" type="image/webp">
+        <img src="./images/labels.jpg" srcset="./images/labels.jpg 1x, ./images/labels@2x.jpg 2x" alt="520 个手写名字标签" class="hero-img" loading="lazy" decoding="async" width="1080" height="810">
+      </picture>
       <div class="hero-overlay">
         <div class="bigcount">
           <span class="num" data-target="520">0</span>
@@ -527,7 +557,10 @@
 <!-- ============ 全屏看图灯箱 ============ -->
 <div class="lightbox" id="lightbox" aria-hidden="true">
   <button class="lightbox-close" id="lightboxClose">×</button>
-  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <picture class="lightbox-pic" id="lightboxPic">
+    <source srcset="" type="image/webp" id="lightboxWebp">
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  </picture>
   <div class="lightbox-cap" id="lightboxCap"></div>
 </div>
 
@@ -541,6 +574,6 @@
   </div>
 </div>
 
-<script src="./script.js"></script>
+<script src="./script.js" defer></script>
 </body>
 </html>
