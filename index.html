@@ -8,8 +8,27 @@
 <title>致贝贝 · 来自山东的一封回信</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- 首屏关键图片 preload -->
+<link rel="preload" as="image" href="./images/letter.webp" type="image/webp">
+<link rel="preload" as="image" href="./images/letter.jpg">
+<!-- 字体异步加载,不阻塞首屏 -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Long+Cang&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Long+Cang&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap"></noscript>
+<!-- 关键 CSS 内联(首屏相关:盒子+进度条) -->
+<style>
+:root{--paper:#f5efe3;--paper-deep:#ebe2cf;--ink:#2b2620;--ink-soft:#5a4f44;--ink-light:#8b7e6c;--accent:#b14233;--gold:#b08a3e;--box:#cdb7e0;--box-light:#e8dcf2;--box-deep:#a896c3;--line:rgba(43,38,32,.18);--line-soft:rgba(43,38,32,.08);--font-zh:"Noto Serif SC","Songti SC","Source Han Serif SC","PingFang SC",serif;--font-kai:"Ma Shan Zheng","KaiTi","STKaiti","FangSong",serif;--font-hand:"Long Cang","Ma Shan Zheng","KaiTi",cursive;--font-en:"Cormorant Garamond",Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html,body{background:var(--paper);color:var(--ink);overflow-x:hidden}
+body{font-family:var(--font-zh);font-weight:300;line-height:1.85;letter-spacing:.02em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;background:radial-gradient(ellipse at 20% 10%,rgba(176,138,62,.06),transparent 50%),radial-gradient(ellipse at 80% 90%,rgba(122,147,179,.06),transparent 50%),var(--paper);position:relative}
+img{display:block;max-width:100%;height:auto}
+.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:1600;background:rgba(43,38,32,.05);pointer-events:none}
+.progress .bar{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));width:0;transition:width .12s linear;transform-origin:left}
+.opening{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,rgba(205,183,224,.4),transparent 70%),radial-gradient(ellipse at 80% 80%,rgba(255,221,191,.3),transparent 60%),linear-gradient(180deg,#f8f0e3 0%,#ebe2cf 100%)}
+.opening-stage{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:60px}
+.box{position:relative;width:320px;height:220px;perspective:1200px;cursor:pointer;transition:transform .8s cubic-bezier(.2,.7,.2,1);transform:translateZ(0)}
+.box-lid{position:absolute;left:0;right:0;top:0;height:70px;background:linear-gradient(180deg,var(--box-light) 0%,var(--box) 60%,var(--box-deep) 100%);border-radius:6px 6px 4px 4px;box-shadow:0 12px 24px -8px rgba(43,38,32,.3),inset 0 -2px 0 rgba(168,150,195,.5);transform-origin:bottom center;transition:transform 1.2s cubic-bezier(.5,-0.2,.4,1.4);z-index:3;will-change:transform}
+</style>
 <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -148,8 +167,8 @@
     <div class="page-img">
       <div class="polaroid" data-tilt="2">
         <picture>
-          <source srcset="./images/letter.webp 1x, ./images/letter@2x.webp 2x" type="image/webp">
-          <img src="./images/letter.jpg" srcset="./images/letter.jpg 1x, ./images/letter@2x.jpg 2x" alt="贝贝的手写信" loading="lazy" decoding="async" width="1080" height="1440">
+          <source srcset="./images/letter.webp" type="image/webp">
+          <img src="./images/letter.jpg" alt="贝贝的手写信" loading="eager" decoding="async" fetchpriority="high" width="1080" height="1440">
         </picture>
         <div class="caption">她写的第一封 · 2026.7.21</div>
       </div>
@@ -166,8 +185,8 @@
     <div class="page-img">
       <div class="polaroid" data-tilt="-3">
         <picture>
-          <source srcset="./images/edict-wrap.webp 1x, ./images/edict-wrap@2x.webp 2x" type="image/webp">
-          <img src="./images/edict-wrap.jpg" srcset="./images/edict-wrap.jpg 1x, ./images/edict-wrap@2x.jpg 2x" alt="手折辣条外包装" loading="lazy" decoding="async" width="1080" height="1440">
+          <source srcset="./images/edict-wrap.webp" type="image/webp">
+          <img src="./images/edict-wrap.jpg" alt="手折辣条外包装" loading="lazy" decoding="async" width="1080" height="1440">
         </picture>
         <div class="caption">被叠成圣旨的 · 黄色金封</div>
       </div>
@@ -222,8 +241,8 @@
     <div class="page-img">
       <div class="polaroid" data-tilt="2">
         <picture>
-          <source srcset="./images/edict-open.webp 1x, ./images/edict-open@2x.webp 2x" type="image/webp">
-          <img src="./images/edict-open.jpg" srcset="./images/edict-open.jpg 1x, ./images/edict-open@2x.jpg 2x" alt="圣旨辣条" loading="lazy" decoding="async" width="1080" height="810">
+          <source srcset="./images/edict-open.webp" type="image/webp">
+          <img src="./images/edict-open.jpg" alt="圣旨辣条" loading="lazy" decoding="async" width="1080" height="810">
         </picture>
         <div class="caption">她给朕的圣旨</div>
       </div>
@@ -240,8 +259,8 @@
     <div class="page-img">
       <div class="polaroid" data-tilt="-2">
         <picture>
-          <source srcset="./images/ugly-doll.webp 1x, ./images/ugly-doll@2x.webp 2x" type="image/webp">
-          <img src="./images/ugly-doll.jpg" srcset="./images/ugly-doll.jpg 1x, ./images/ugly-doll@2x.jpg 2x" alt="丑萌挂件" loading="lazy" decoding="async" width="1080" height="1310">
+          <source srcset="./images/ugly-doll.webp" type="image/webp">
+          <img src="./images/ugly-doll.jpg" alt="丑萌挂件" loading="lazy" decoding="async" width="1080" height="1310">
         </picture>
         <div class="caption">丑丑的 · 我最爱的</div>
       </div>
@@ -294,8 +313,8 @@
     <div class="page-img">
       <div class="polaroid" data-tilt="3">
         <picture>
-          <source srcset="./images/bone.webp 1x, ./images/bone@2x.webp 2x" type="image/webp">
-          <img src="./images/bone.jpg" srcset="./images/bone.jpg 1x, ./images/bone@2x.jpg 2x" alt="骨头挂件" loading="lazy" decoding="async" width="1080" height="1440">
+          <source srcset="./images/bone.webp" type="image/webp">
+          <img src="./images/bone.jpg" alt="骨头挂件" loading="lazy" decoding="async" width="1080" height="1440">
         </picture>
         <div class="caption">你给我的小骨头</div>
       </div>
@@ -312,8 +331,8 @@
     <div class="page-img">
       <div class="polaroid" data-tilt="-2">
         <picture>
-          <source srcset="./images/rabbit.webp 1x, ./images/rabbit@2x.webp 2x" type="image/webp">
-          <img src="./images/rabbit.jpg" srcset="./images/rabbit.jpg 1x, ./images/rabbit@2x.jpg 2x" alt="奶黄兔叽挂件" loading="lazy" decoding="async" width="1080" height="1440">
+          <source srcset="./images/rabbit.webp" type="image/webp">
+          <img src="./images/rabbit.jpg" alt="奶黄兔叽挂件" loading="lazy" decoding="async" width="1080" height="1440">
         </picture>
         <div class="caption">奶黄色 · 抱着挂扣的小家伙</div>
       </div>
@@ -367,8 +386,8 @@
     <div class="page-img">
       <div class="polaroid" data-tilt="-3">
         <picture>
-          <source srcset="./images/pen.webp 1x, ./images/pen@2x.webp 2x" type="image/webp">
-          <img src="./images/pen.jpg" srcset="./images/pen.jpg 1x, ./images/pen@2x.jpg 2x" alt="中性笔" loading="lazy" decoding="async" width="1080" height="1440">
+          <source srcset="./images/pen.webp" type="image/webp">
+          <img src="./images/pen.jpg" alt="中性笔" loading="lazy" decoding="async" width="1080" height="1440">
         </picture>
         <div class="caption">白色的那只 · 陪我写字</div>
       </div>
@@ -385,8 +404,8 @@
     <div class="page-img">
       <div class="polaroid" data-tilt="2">
         <picture>
-          <source srcset="./images/whale.webp 1x, ./images/whale@2x.webp 2x" type="image/webp">
-          <img src="./images/whale.jpg" srcset="./images/whale.jpg 1x, ./images/whale@2x.jpg 2x" alt="鲸鱼手机链" loading="lazy" decoding="async" width="1080" height="1440">
+          <source srcset="./images/whale.webp" type="image/webp">
+          <img src="./images/whale.jpg" alt="鲸鱼手机链" loading="lazy" decoding="async" width="1080" height="1440">
         </picture>
         <div class="caption">小鲸鱼 · Sweet</div>
       </div>
@@ -421,8 +440,8 @@
 
     <div class="hero-art">
       <picture>
-        <source srcset="./images/labels.webp 1x, ./images/labels@2x.webp 2x" type="image/webp">
-        <img src="./images/labels.jpg" srcset="./images/labels.jpg 1x, ./images/labels@2x.jpg 2x" alt="520 个手写名字标签" class="hero-img" loading="lazy" decoding="async" width="1080" height="810">
+        <source srcset="./images/labels.webp" type="image/webp">
+        <img src="./images/labels.jpg" alt="520 个手写名字标签" class="hero-img" loading="lazy" decoding="async" width="1080" height="810">
       </picture>
       <div class="hero-overlay">
         <div class="bigcount">
